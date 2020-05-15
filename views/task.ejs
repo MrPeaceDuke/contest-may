@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Задача №<%= task[0].id %></title>
+	<link rel="stylesheet" href="../css/main.css" type="text/css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="socket.io/socket.io.js"></script>
+</head>
+<body>
+	<ul class="nav justify-content-center">
+		<li class="nav-item">
+			<a class="nav-link active" href="/index">Главная</a>
+		</li>
+	</ul>
+	<div class="container">
+		<div class="row">
+			<h5><%= task[0].task_name %></h5>
+		</div>
+		<div class="row">
+			<p><%= task[0].task_info %></p>
+		</div>
+	</div>
+</body>
+</html>

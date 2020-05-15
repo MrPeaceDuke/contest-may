@@ -11,7 +11,6 @@
 	<script src="socket.io/socket.io.js"></script>
 </head>
 <body>
-
 	<div class="container">
 		<div class="row p-2">
 			<div class="col-10">
@@ -19,18 +18,24 @@
 			</div>
 			<div class="col-2">
 				<form action="exit" method="POST">
-					<button class="btn btn-sm btn-outline-danger" type="submit">Logout</button>
+					<button class="btn btn-sm btn-outline-danger" type="submit">Выход</button>
 				</form>
 			</div>
 		</div>
 		<div class="row">
-			<% if(tasks != null) for(var i=0; i<tasks.length; i++) {%>
-				<div class="btn btn-primary btn-lg btn-block"><%=tasks[i].task_name %></div>
-			<%} %>
+			<form action="task" method="POST">
+				<input name='task_idx' class='taskinput' type="text" style="display: none" value="0">
+				<% if(tasks != null) for(var i=0; i<tasks.length; i++) {%>
+					<button type="submit" class="btn btn-primary btn-lg btn-block task" data-id="<%= tasks[i].id %>"><%=tasks[i].task_name %></button>
+				<%} %>
+			</form>
 		</div>
 	</div>
-	
-	
-	
 </body>
+<script>
+	$('.task').click(function(){
+		var id = $(this).data('id');
+		$('.taskinput').val(id);
+	});
+</script>
 </html>

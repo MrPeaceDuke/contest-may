@@ -98,7 +98,29 @@ app.post('/auth', function(request, response) {
 		response.end();
 	}
 });
-
+app.post('/task', function(request, response) {
+	if (request.session.loggedin) {
+		var task_id = request.body.task_idx;
+		conn.query('SELECT * FROM tasks WHERE id = ? LIMIT 1', [task_id], function(error, results, fields) {
+			if (results.length > 0) {
+				console.log(results);
+				request.session.task = results;
+				response.render('task', {
+					username: request.session.username,
+					idaccount: request.session.idaccount,
+					task: request.session.task
+				});
+			} else {
+				// response.send('Incorrect Username and/or Password!');
+				res.redirect('index');
+			}			
+			response.end();
+		});
+	} else {
+		// res.send('Please login to view this page!');
+		response.redirect('/index');
+	}
+});
 
 io.on('connection', function(socket) {
 	console.log('client add');
