@@ -103,12 +103,12 @@ app.post('/task', function(request, response) {
 		var task_id = request.body.task_idx;
 		conn.query('SELECT * FROM tasks WHERE id = ? LIMIT 1', [task_id], function(error, results, fields) {
 			if (results.length > 0) {
-				console.log(results);
 				request.session.task = results;
 				response.render('task', {
 					username: request.session.username,
 					idaccount: request.session.idaccount,
-					task: request.session.task
+					task: request.session.task,
+					tasks: request.session.tasks
 				});
 			} else {
 				// response.send('Incorrect Username and/or Password!');

@@ -10,7 +10,7 @@
 	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="socket.io/socket.io.js"></script>
 </head>
-<body>
+<!-- <body>
 	<ul class="nav justify-content-center">
 		<li class="nav-item">
 			<a class="nav-link active" href="/index">Главная</a>
@@ -24,5 +24,81 @@
 			<p><%= task[0].task_info %></p>
 		</div>
 	</div>
+</body> -->
+<body>
+	<div class="container">
+		<div class="row p-2">
+			<div class="col-10">
+				Привет <b><%=username %>[<%=idaccount %>]</b>
+			</div>
+			<div class="col-2">
+				<form action="exit" method="POST">
+					<button class="btn btn-sm btn-outline-danger" type="submit">Logout</button>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-3 bg-dark">
+				
+				<form action="task" method="POST">
+					<input name='task_idx' class='taskinput' type="text" style="display: none" value="0">
+						<ul class="nav nav-pills flex-column">
+							<% if(tasks != null) for(var i=0; i<tasks.length; i++) {%>
+								<li class="nav-item">
+									<button type="submit" class="btn btn-primary btn-lg btn-block task" data-id="<%= tasks[i].id %>"><%=tasks[i].task_name %></button>
+								</li>
+							<%} %>
+						</ul>
+				</form>
+			</div>
+			<div class="col-9 bg-light">
+				<p><%=task[0].task_info %></p>
+				<!-- Nav bar -->
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item" role="presentation">
+						<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Ввести код</a>
+					</li>
+					<li class="nav-item" role="presentation">
+						<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Загрузить файл с кодом</a>
+					</li>
+				</ul>
+				<!-- Nav bar -->
+
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+						<form action="/codetext" method="post" enctype="multipart/form-data"></form>
+							<select class="custom-select mt-2">
+								<option selected>Выберите язык программирования</option>
+								<option value="1">Nodejs</option>
+								<option value="2">Python</option>
+							</select>
+							<label for="codeText">Введите ваш код</label>
+							<textarea class="form-control" id="codeText" rows="3"></textarea>
+							<button type="submit" class="btn btn-primary mt-2">Отправить и проверить</button>
+						</form>
+					</div>
+
+					<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+						<form action="/codefile" method="post" enctype="multipart/form-data"></form>
+							<select class="custom-select mt-2">
+								<option selected>Выберите язык программирования</option>
+								<option selected value="1">Nodejs</option>
+								<option value="2">Python</option>
+							</select>
+							<label for="codeFile">Загрузите файл с исходным кодом</label><br>
+							<input type="file" name="my_file" id="codeFile">
+							<button type="submit" class="btn btn-primary">Отправить и проверить</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+<script>
+		$('.task').click(function(){
+			var id = $(this).data('id');
+			$('.taskinput').val(id);
+		});
+</script>
 </html>
