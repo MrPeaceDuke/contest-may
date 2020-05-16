@@ -53,15 +53,14 @@ app.get('/', (req, res)=>{
 });
 app.get('/index', (req, res)=>{
 	if (req.session.loggedin) {
-		conn.query('SELECT * FROM tasks', function(error, results) {
-			
+		conn.query('SELECT * FROM settasks', function(error, results) {
 			if (results.length > 0) {
-				req.session.tasks = results;
+				req.session.settasks = results;
 			}
 			res.render('index', {
 				username: req.session.username,
 				idaccount: req.session.idaccount,
-				tasks: req.session.tasks
+				settasks: req.session.settasks
 			});
 		});
 		
@@ -74,6 +73,79 @@ app.get('/index', (req, res)=>{
 app.get('/exit', (req, res)=>{
 	req.session.destroy();
 	res.redirect('/');
+});
+app.get('/st-*', (req, res)=>{
+	if (req.session.loggedin) {
+		var id = req.url.slice(4, req.url.length);
+		conn.query('SELECT * FROM tasks WHERE id_settask = ?', [id], function(error, results, fields) {
+			if (results != null) {
+				
+				req.session.tasks = results;
+				res.render('settask', {
+					username: req.session.username,
+					idaccount: req.session.idaccount,
+					settask_id: id,
+					settasks: req.session.settasks,
+					tasks: req.session.tasks
+				});
+			}
+			else{
+				res.redirect('index');
+			}
+			
+		});
+		
+	} else {
+		// res.send('Please login to view this page!');
+		res.render('login');
+	}
+});
+app.get('/task-*', (req, res)=>{
+	if (req.session.loggedin) {
+		var id = req.url.slice(6, req.url.length);
+		conn.query('SELECT * FROM tasks WHERE id = ? LIMIT 1', [id], function(error, results, fields) {
+			if (results != null) {
+				
+				req.session.task = results;
+				res.render('task', {
+					username: req.session.username,
+					idaccount: req.session.idaccount,
+					task: req.session.task,
+					tasks: req.session.tasks
+				});
+			}
+			else{
+				res.redirect('index');
+			}
+			
+		});
+		
+	} else {
+		res.render('login');
+	}
+});
+app.post('/task', function(request, response) {
+	if (request.session.loggedin) {
+		var task_id = request.body.task_idx;
+		conn.query('SELECT * FROM tasks WHERE id = ? LIMIT 1', [task_id], function(error, results, fields) {
+			if (results.length > 0) {
+				request.session.task = results;
+				response.render('task', {
+					username: request.session.username,
+					idaccount: request.session.idaccount,
+					task: request.session.task,
+					tasks: request.session.tasks
+				});
+			} else {
+				// response.send('Incorrect Username and/or Password!');
+				res.redirect('index');
+			}			
+			response.end();
+		});
+	} else {
+		// res.send('Please login to view this page!');
+		response.redirect('/index');
+	}
 });
 // app.post('/exit', function(req, res){
 // 	req.session.destroy();
@@ -102,29 +174,7 @@ app.post('/auth', function(request, response) {
 		response.end();
 	}
 });
-app.post('/task', function(request, response) {
-	if (request.session.loggedin) {
-		var task_id = request.body.task_idx;
-		conn.query('SELECT * FROM tasks WHERE id = ? LIMIT 1', [task_id], function(error, results, fields) {
-			if (results.length > 0) {
-				request.session.task = results;
-				response.render('task', {
-					username: request.session.username,
-					idaccount: request.session.idaccount,
-					task: request.session.task,
-					tasks: request.session.tasks
-				});
-			} else {
-				// response.send('Incorrect Username and/or Password!');
-				res.redirect('index');
-			}			
-			response.end();
-		});
-	} else {
-		// res.send('Please login to view this page!');
-		response.redirect('/index');
-	}
-});
+
 
 io.on('connection', function(socket) {
 	console.log('client add');

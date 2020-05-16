@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Диплом</title>
+	<title>Сборник "<%= settasks[settask_id-1].set_name %>"</title>
 	<link rel="stylesheet" href="../css/main.css" type="text/css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
@@ -12,33 +12,28 @@
 </head>
 <body>
 	<div class="container">
+		<!-- menu -->
 		<div class="row p-2">
-			<div class="col-10">
+			<div class="col-8">
 				Привет <b><%=username %>[<%=idaccount %>]</b>
+			</div>
+			<div class="col-2">
+				<a class="nav-link" href="/index">Главная</a>
 			</div>
 			<div class="col-2">
 				<a class="nav-link btn btn-sm btn-outline-danger" href="/exit">Выход</a>
 			</div>
 		</div>
-		<div class="row justify-content-center">
-			<h4>Сборники задач</h4>
-		</div>
+		<!-- menu -->
 		<div class="row">
 			<div class="list-group">
-			<% if(settasks != null) for(var i=0;i < settasks.length; i++) {%>
-				<a href="st-<%= settasks[i].id_settask %>" class="list-group-item list-group-item-action">
-					<%= settasks[i].set_name %>
+			<% if(tasks != null) for(var i=0;i < tasks.length; i++) {%>
+				<a href="task-<%= tasks[i].id %>" class="list-group-item list-group-item-action">
+					<%= tasks[i].task_name %>
 				</a>
 			<%} %>
 			</div>
 		</div>
-		
 	</div>
 </body>
-<!-- <script>
-	$('.task').click(function(){
-		var id = $(this).data('id');
-		$('.taskinput').val(id);
-	});
-</script> -->
 </html>
