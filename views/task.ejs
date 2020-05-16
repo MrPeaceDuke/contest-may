@@ -28,13 +28,14 @@
 <body>
 	<div class="container">
 		<div class="row p-2">
-			<div class="col-10">
+			<div class="col-8">
 				Привет <b><%=username %>[<%=idaccount %>]</b>
 			</div>
 			<div class="col-2">
-				<form action="exit" method="POST">
-					<button class="btn btn-sm btn-outline-danger" type="submit">Logout</button>
-				</form>
+				<a class="nav-link" href="/index">Главная</a>
+			</div>
+			<div class="col-2">
+				<a class="nav-link btn btn-sm btn-outline-danger" href="/exit">Выход</a>
 			</div>
 		</div>
 		<div class="row">

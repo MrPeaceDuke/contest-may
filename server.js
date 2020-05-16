@@ -71,10 +71,14 @@ app.get('/index', (req, res)=>{
 	}
 	
 });
-app.post('/exit', function(req, res){
+app.get('/exit', (req, res)=>{
 	req.session.destroy();
 	res.redirect('/');
 });
+// app.post('/exit', function(req, res){
+// 	req.session.destroy();
+// 	res.redirect('/');
+// });
 app.post('/auth', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
