@@ -185,7 +185,7 @@ function CheckCode(codeType, codeFile, answers){
 			execCommand = "node";
 			break;
 		case '2':
-			execCommand = "py";
+			execCommand = "python";
 			break;
 
 	}
@@ -202,8 +202,8 @@ function CheckCode(codeType, codeFile, answers){
 		const child_process = require("child_process");
 
 		try {
-			console.log(execCommand + " uploads/" + codeFile+ " < " + inputFile);
-			codeAnswer = child_process.execSync(execCommand + " uploads/" + codeFile+ " < " + inputFile,{timeout: 3000, maxBuffer:2}).toString();
+			console.log(execCommand + " uploads\\" + codeFile+ " < " + inputFile);
+			codeAnswer = child_process.execSync(execCommand + " uploads\\" + codeFile+ " < " + inputFile,{timeout: 3000, maxBuffer:2}).toString();
 			pidusage(codeAnswer.pid, function (err, stats) {
 
 				console.log(stats);
