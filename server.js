@@ -138,7 +138,7 @@ app.post('/task', function(request, response) {
 				});
 			} else {
 				// response.send('Incorrect Username and/or Password!');
-				res.redirect('index');
+				response.redirect('index');
 			}			
 			response.end();
 		});
