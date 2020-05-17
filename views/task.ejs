@@ -24,14 +24,15 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-3 bg-dark">
+			<div class="col-3 bg-light">
 				
-				<form action="task" method="POST">
+				<form action="task" method="POST" class="justify-content-center">
 					<input name='task_idx' class='taskinput' type="text" style="display: none" value="0">
 						<ul class="nav nav-pills flex-column">
+							<h5 class="mx-auto mt-1">Задачи сборника</h5>
 							<% if(tasks != null) for(var i=0; i<tasks.length; i++) {%>
 								<li class="nav-item">
-									<button type="submit" class="btn btn-primary btn-lg btn-block task" data-id="<%= tasks[i].id %>"><%=tasks[i].task_name %></button>
+									<button type="submit" class="btn btn-outline-success btn-block task mx-auto m-3" data-id="<%= tasks[i].id %>"><%=tasks[i].task_name %></button>
 								</li>
 							<%} %>
 						</ul>
