@@ -203,7 +203,7 @@ function CheckCode(codeType, codeFile, answers){
 
 		try {
 			console.log(execCommand + " ./uploads/" + codeFile+ " < " + inputFile);
-			codeAnswer = child_process.execSync("ulimit -v 1024 ",{timeout: 3000}).toString();
+			codeAnswer = child_process.execSync("timeout -m 500 "+execCommand + " ./uploads/" + codeFile + " < " + "./" +inputFile.replace('\\', '/'),{timeout: 3000}).toString();
 			pidusage(codeAnswer.pid, function (err, stats) {
 
 				console.log(stats);
