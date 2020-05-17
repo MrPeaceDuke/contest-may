@@ -193,7 +193,7 @@ function CheckCode(codeType, codeFile, answers){
 
 	for (var i=0; i<answers.length; i++){
 		
-		trueAnswer = answers[i].output;
+		trueAnswer = answers[i].output+"\n";
 		inputFile="inputs\\" + answers[i].id_answer +".txt";
 		
 
