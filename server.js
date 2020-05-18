@@ -203,7 +203,7 @@ function CheckCode(codeType, codeFile, answers){
 
 		try {
 			console.log(execCommand + " ./uploads/" + codeFile+ " < " + inputFile);
-			codeAnswer = child_process.execSync("perl timeout -t 2 perl -e 'while ($i<100000000) {$i++;}'",{timeout: 10000, shell: '/bin/bash'}).toString();
+			codeAnswer = child_process.execSync("perl timeout -m 1"+execCommand + " ./uploads/" + codeFile + " < " + "./" +inputFile.replace('\\', '/'),{timeout: 10000, shell: '/bin/bash'}).toString();
 			pidusage(codeAnswer.pid, function (err, stats) {
 
 				console.log(stats);
