@@ -183,10 +183,10 @@ function CheckCode(codeType, codeFile, answers){
 
 	switch(codeType) {
 		case '1':
-			var execCommand = node.require('compile-run');
+			var execCommand = require('compile-run');
 			break;
 		case '2':
-			var execCommand = python.require('compile-run');
+			var execCommand = require('compile-run');
 			break;
 
 	}
