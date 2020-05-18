@@ -1,5 +1,14 @@
 
-
+import sys
+cars = ["Ford",  "Volvo",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW",  "BMW"]
+ 
+r = sys.getsizeof(cars);
+print(r)
+i=0
+while i<10000000:
+	i= i+1
+print(i)
+print(sys.getsizeof(i))
 x = '1234567'
 a = int(input())
 b =int(input())
