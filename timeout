@@ -23,7 +23,7 @@
 
 sub usage{ print STDERR <<usage_ends;
 Usage:
-	limexec [-t timelimit] [-m memlimit] [-x hertz] command [arguments ...]
+	timeout [-t timelimit] [-m memlimit] [-x hertz] command [arguments ...]
 
 usage_ends
 	die;
