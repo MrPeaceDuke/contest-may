@@ -61,7 +61,7 @@ var storage = multer.diskStorage({
 	let output = [];
 	console.log("+1");
 
-	conn.query('SELECT a.id_answer, a.output, t.max_time, t.max_memory FROM answers a ,tasks t WHERE a.id_task=? and a.id_task=t.id ',req.body.task_id, function(error, results) {
+	conn.query('SELECT a.id_answer, a.input, a.output, t.max_time, t.max_memory FROM answers a ,tasks t WHERE a.id_task=? and a.id_task=t.id ',req.body.task_id, function(error, results) {
 		if(error) console.log(error);
 		else {
 			output = results;
@@ -178,66 +178,31 @@ io.on('connection', function(socket) {
 
 
 function CheckCode(codeType, codeFile, answers){
-	let pidusage = require('pidusage');
 	var execCommand = "";
+	codeResult=true;
+
 	switch(codeType) {
 		case '1':
-			execCommand = "node";
+			var execCommand = node.require('compile-run');
 			break;
 		case '2':
-			execCommand = "python";
+			var execCommand = python.require('compile-run');
 			break;
 
 	}
-	codeResult=true;
 
 	for (var i=0; i<answers.length; i++){
 		
-		trueAnswer = answers[i].output+"\n";
-		inputFile="inputs\\" + answers[i].id_answer +".txt";
-		
-
-		
-
-		const child_process = require("child_process");
-
-		try {
-			console.log(execCommand + " ./uploads/" + codeFile+ " < " + inputFile);
-			codeAnswer = child_process.execSync("ulimit -m 16; "+execCommand + " ./uploads/" + codeFile + " < " + "./" +inputFile.replace('\\', '/'),{timeout: 10000, shell: '/bin/bash'}).toString();
-			pidusage(codeAnswer.pid, function (err, stats) {
-
-				console.log(stats);
-				
+		let resultPromise = execCommand.runFile(codeFile, { stdin: answers[i].input});
+		resultPromise
+			.then(result => {
+				console.log(result);
+			})
+			.catch(err => {
+				console.log(err);
 			});
-			console.log(codeAnswer);
-			if (codeAnswer!=trueAnswer) {
-				codeResult=false;
-				return ("Тест №"+ i+1 +" Wrong Answer");
-			} 
-		  
-		  } catch (err) {
-		  
-			console.log(err);
-			switch(err.code) {
-				case "ETIMEDOUTs":  
-					return ("Тест №"+ i++ +" TimeLimit");
-				case "ENOBUFS": 
-					return ("Тест №"+ i++ +" Memory limit");
-				default:
-					return ("Тест №"+ i++ +" Application Error");
-			}
-			
-			
-		  
-		  }
-
-
-		
-		
-
-
-		
-	};
-
+	}
+	
+	
 	if (codeResult) return("OK");	
 }
