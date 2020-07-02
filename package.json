@@ -24,6 +24,7 @@
     "node": "^14.2.0",
     "pidusage": "^2.0.19",
     "socket.io": "^2.3.0",
-    "socket.io-stream": "^0.9.1"
+    "socket.io-stream": "^0.9.1",
+    "sync": "^0.2.5"
   }
 }

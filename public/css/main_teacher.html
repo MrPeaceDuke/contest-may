@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Диплом</title>
+    <link rel="stylesheet" href="main.css" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/24cdb6acb2.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="header navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="#">CDOT LMS</a>
+            <!-- Меню -->
+            <div class="navbar-collapse collapse pl-2" id="navbarResponsive">
+                <ul class="navbar-nav ">
+                    <li class="nav-item active">
+                        <a class="btn shadow-none  nav-link" href="#">Задачи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class=" btn shadow-none  nav-link" href="#">Список студентов</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class=" btn shadow-none  nav-link" href="#">Последние решения</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Меню -->
+            <!-- Имя пользователя с выпадающим списком -->
+            <li class="ml-auto nav-item dropdown list-unstyled">
+                <a class="nav-link dropdown-toggle text-light btn shadow-none" id="userDropdown" role="button" aria-expanded="false" aria-haspopup="true" href="#" data-toggle="dropdown">
+                    <span>Иванов Иван</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#">Профиль</a>
+                    <a class="dropdown-item" href="#">Настройки</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="login.html">Выйти</a>
+                </div>
+            </li>
+            <!-- Имя пользователя с выпадающим списком -->
+            <!-- Кнопка для мобильных -->
+            <button class="navbar-toggler" aria-expanded="false" aria-controls="navbarResponsive" aria-label="Toggle navigation" type="button" data-target="#navbarResponsive" data-toggle="collapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Кнопка для мобильных -->
+        </div>
+    </nav>
+    <div class="container content py-3">
+        <!-- Поиск -->
+        <div class="p-1 bg-white rounded rounded-pill shadow-sm mb-4">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button id="button-addon2" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+                </div>
+                <input type="search" placeholder="Поиск" aria-describedby="button-addon2" class="shadow-none form-control border-0 mr-3 bg-white">
+            </div>
+        </div>
+        <!-- Поиск -->
+        <!-- Сборник -->
+        <div class="card border-0 shadow mb-4 rounded-0">
+            <div class="card-body p-5">
+                <a href="#">
+                    <h4>Сборник 1</h4>
+                </a>
+                <p class="font-italic text-muted">Описание сборника</p>
+                <!-- Прогрессбар-->
+                <div style="height: 4px" class="progress mb-3">
+                    <div role="progressbar" style="width: 70%" class="progress-bar"></div>
+                </div>
+                <!-- Прогрессбар-->
+                <span class="text-muted task-num p-1 rounded bg-light">4</span>
+                <a class="rounded-pill btn btn-sm btn-primary" href="#">Перейти</a>
+                <a class="rounded-pill btn btn-sm btn-light" href="#"><i class="far fa-edit"></i>Редактировать</a>
+            </div>
+        </div>
+        <!-- сбрник -->
+
+          <!-- Сборник -->
+        <div class="card border-0 shadow mb-4 rounded-0">
+            <div class="card-body p-5">
+                <a href="#">
+                    <h4>Сборник 2</h4>
+                </a>
+                
+                <p class="font-italic text-muted">Описание сборника</p>
+                <!-- Прогрессбар-->
+                <div style="height: 4px" class="progress mb-3">
+                    <div role="progressbar" style="width: 25%" class="progress-bar"></div>
+                </div>
+                <!-- Прогрессбар-->
+                <span class="text-muted task-num p-1 rounded bg-light">10</span>
+                <a class="rounded-pill btn btn-sm btn-primary" href="#">Перейти</a>
+                <a class="rounded-pill btn btn-sm btn-light" href="#"><i class="far fa-edit"></i>Редактировать</a>
+            </div>
+        </div>
+        <!-- сбрник -->
+
+    </div>
+    <!-- футер -->
+    <div class="text-center footer">
+        <p class="mb-0">© ФГБОУ ВО Пермский ГАТУ</p>
+    </div>
+    <!-- футер -->
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+</html>

@@ -36,13 +36,7 @@ conn.connect(function(err){
 			console.log("Подключение к серверу MySQL успешно установлено");
 	}
 });
-// conn.end(function(err) {
-// 	if (err) {
-// 			return console.log("Ошибка: " + err.message);
-// 	}
-// 	console.log("Подключение закрыто");
-// });
-//--------------
+
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
@@ -51,42 +45,38 @@ var storage = multer.diskStorage({
 	filename: function (req, file, cb) {
 	  cb(null, file.originalname)
 	}
-  });
+});
 
 
-  var upload = multer({ storage : storage });
+var upload = multer({ storage : storage });
 
-  app.post("/check", upload.array("filedata", 1), function(req, res,) {
-
-	let output = [];
-	console.log("+1");
-
+app.post("/checkfile", upload.single("filedata"), function(req, res,) {
+	console.log(req.file)
+	console.log("CheckFile");
 	conn.query('SELECT a.id_answer, a.input, a.output, t.max_time, t.max_memory FROM answers a ,tasks t WHERE a.id_task=? and a.id_task=t.id ',req.body.task_id, function(error, results) {
 		if(error) console.log(error);
 		else {
+			console.log(req.body );
 			output = results;
 			console.log(output);
 			console.log(req.body);
-			chechResult = CheckCode(req.body.langId, req.files[0].originalname, output);
-			console.log(chechResult);
+			chechResult = CheckCode("file",req.body.langId, req.file.originalname, output,res,req.body.task_id, req.body.user_id);
 		}
-		
 	});
-	
+});
 
-	
-
-
-
-	console.log(req.output);
-	
-
-
-
-	
-	console.log(req.body.task_id);
-	console.log(req.files);
-    res.send(null);
+app.post("/checktext", upload.none(), function(req, res,) {
+	console.log("CheckText");
+	conn.query('SELECT a.id_answer, a.input, a.output, t.max_time, t.max_memory FROM answers a ,tasks t WHERE a.id_task=? and a.id_task=t.id ',req.body.task_id, function(error, results) {
+		if(error) console.log(error);
+		else {
+			console.log(req.body );
+			output = results;
+			console.log(output);
+			console.log(req.body);
+			chechResult = CheckCode("text",req.body.langId, req.body.codeText, output,res, req.body.task_id, req.body.user_id);
+		}
+	});
 });
 
 app.use(express.static(__dirname + '/public'));
@@ -126,11 +116,20 @@ app.get('/contest-page/:ids', (req, res)=>{
 			if (results.length > 0) {
 				req.session.tasks = results;
 			}
-			res.render('contest-page', {
-				username: req.session.username,
-				contestid: ids,
-				idaccount: req.session.idaccount,
-				tasks: req.session.tasks
+			console.log(req.session.idaccount+" | "+ids);
+			conn.query('SELECT * FROM user_attempts WHERE id_user='+req.session.idaccount+' and id_task='+ids, function(error, results) {
+			
+				if (results.length > 0) {
+					req.session.attempts = results;
+				}
+				console.log(req.session.attempts);
+				res.render('contest-page', {
+					username: req.session.username,
+					contestid: ids,
+					idaccount: req.session.idaccount,
+					tasks: req.session.tasks,
+					attempts: req.session.attempts
+				});
 			});
 		});
 		
@@ -177,32 +176,152 @@ io.on('connection', function(socket) {
 });
 
 
-function CheckCode(codeType, codeFile, answers){
+function CheckCode(checkType, codeType, code, answers, res, id_task, id_user){
+	const  { c , cpp , node , python , java }  =  require ( 'compile-run' ) ;
+	var i = 0;
+	var max = answers.length;
+
 	var execCommand = "";
-	codeResult=true;
+	var codeResult=true;
 
 	switch(codeType) {
 		case '1':
-			var execCommand = require('compile-run');
+			var execCommand = node;
 			break;
 		case '2':
-			var execCommand = require('compile-run');
+			var execCommand = python;
+			break;
+		case '3':
+			var execCommand = c;
+			break;
+		case '4':
+			var execCommand = cpp;
+			break;
+		case '5':
+			var execCommand = java;
 			break;
 
 	}
+	run();	
 
-	for (var i=0; i<answers.length; i++){
-		
-		let resultPromise = execCommand.runFile(codeFile, { stdin: answers[i].input});
-		resultPromise
-			.then(result => {
-				console.log(result);
-			})
-			.catch(err => {
-				console.log(err);
+	function run() {
+
+		if (checkType=="file") {
+			let resultPromise = execCommand.runFile("scripts/"+code, { stdin: answers[i].input, timeout: answers[i].max_time},(err, result) => {
+				if(err){
+					console.log(err);
+				}
+				else{
+					if ((result.stderr == '') && (result.errorType == "run-time")) {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Time Limit" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Time Limit");
+						return;
+
+					}
+					if (result.errorType == "compile-time") {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Compilation Error" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Compilation Error");
+						return;
+					}
+					if (result.errorType == "run-time") {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Runtime Error" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Runtime Error");
+						return;
+					}
+					if (result.stdout!=answers[i].output+"\r\n")  {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Wrong Answer" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Wrong Answer");
+						return;
+					}
+					if (result.memoryUsage / 1024 >= answers[i].max_memory) {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Memory Limit" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Memory Limit");
+						return;
+					}
+					if (i+1!=max) {
+						i++;
+						run();
+					}  else {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "+" );
+						res.send(dateTime+","+code+","+"+");
+						return;
+					}
+				}
 			});
+		} else {
+			let resultPromise = execCommand.runSource(code, { stdin: answers[i].input, timeout: answers[i].max_time},(err, result) => {
+				if(err){
+					console.log(err);
+				}
+				else{
+					if ((result.stderr == '') && (result.errorType == "run-time")) {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Time Limit" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Time Limit");
+						return;
+
+					}
+					if (result.errorType == "compile-time") {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Compilation Error" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Compilation Error");
+						return;
+					}
+					if (result.errorType == "run-time") {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Runtime Error" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Runtime Error");
+						return;
+					}
+					if (result.stdout!=answers[i].output+"\r\n")  {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Wrong Answer" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Wrong Answer");
+						return;
+					}
+					if (result.memoryUsage / 1024 >= answers[i].max_memory) {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "Тест N"+(i+1)+" Memory Limit" );
+						res.send(dateTime+","+code+","+"Тест N"+(i+1)+" Memory Limit");
+						return;
+					}
+					if (i+1!=max) {
+						i++;
+						run();
+					}  else {
+						var dateTime = new Date();
+						dateTime = dateTime.getFullYear() + "-" + (dateTime.getMonth() + 1) + "-" + dateTime.getDate() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+						SetAttempt(id_task, id_user, dateTime,code, "+" );
+						res.send(dateTime+","+code+","+"+");
+						return;
+					}
+				}
+			});
+		}
 	}
-	
-	
-	if (codeResult) return("OK");	
 }
+
+function SetAttempt(id_task, id_user, date, code, res){
+	console.log(id_task, id_user, date, code, res);
+	conn.query('INSERT INTO `user_attempts`(`id_task`, `id_user`, `result`, `code`, `date`) VALUES (?,?,?,?,?)',[id_task, id_user, res, code, date], function(error, results) {
+		if(error) console.log(error);
+	});
+}
+
